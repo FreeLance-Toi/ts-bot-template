@@ -7,7 +7,6 @@ const { TOKEN } = process.env
 export default class Bot extends Client {
     color: ColorResolvable
     commands: Collection<string, Command>
-    events: Collection<string, Event>
     buttons: Collection<string, Button>
     modals: Collection<string, Modal>
 
@@ -15,7 +14,6 @@ export default class Bot extends Client {
         super({ intents: 32767})
 
         this.color = color || '#000000'
-        this.events = new Collection()
         this.commands = new Collection()
         this.buttons = new Collection()
         this.modals = new Collection()
@@ -33,7 +31,8 @@ export default class Bot extends Client {
     }
 
     registerEvent(event: Event) {
-        this.events.set(event.name, event)
+        if (event.once) this.once(event.name, event.callback.bind(null, this))
+        else this.on(event.name, event.callback.bind(null, this))
     }
 
     registerCommand(command: Command) {
