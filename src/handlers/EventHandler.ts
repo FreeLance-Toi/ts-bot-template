@@ -11,10 +11,10 @@ module.exports = (bot: Bot) => {
             const event: Event = require(`~/events/${path}`)
 
             if (!event.name) return table.addRow('?', event.once ? '✔' : '❌', '🔸 ÉCHOUÉ', `Nom de l'événement manquant.`)
-            if (!event.callback) return table.addRow('', event.once ? '✔' : '❌', '🔸 ÉCHOUÉ', `Fonction d'exécution manquante.`)
+            if (!event.callback) return table.addRow(event.name, event.once ? '✔' : '❌', '🔸 ÉCHOUÉ', `Fonction d'exécution manquante.`)
 
             bot.registerEvent(event)
-            table.addRow('', event.once ? '✔' : '❌', '🔹 SUCCÈS')
+            table.addRow(event.name, event.once ? '✔' : '❌', '🔹 SUCCÈS')
         })
 
         return console.log(table.toString())
