@@ -5,7 +5,7 @@ const Ascii = require('ascii-table')
 
 module.exports = (bot: Bot) => {
     const components: string[] = require('./FileHandler')('./src/components/', true)
-    const table = new Ascii('Components')
+    const table = new Ascii('Composants')
 
     if (components.length > 0) {
         components.forEach((path: string) => {
@@ -20,6 +20,6 @@ module.exports = (bot: Bot) => {
         return console.log(table.toString())
     }
 
-    table.addRow('Aucune donnée')
+    table.addRow('Aucune donnée !')
     console.log(table.toString())
 }
