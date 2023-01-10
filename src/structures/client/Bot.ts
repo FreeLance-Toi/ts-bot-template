@@ -1,12 +1,13 @@
 import { Client, Collection, ColorResolvable } from 'discord.js'
 import {Button, Component, Modal} from '~/structures/modules/Component'
+import Command from "~/structures/modules/Command";
 import Event from "~/structures/modules/Event";
 const { TOKEN } = process.env
 
 export default class Bot extends Client {
     color: ColorResolvable
+    commands: Collection<string, Command>
     events: Collection<string, Event>
-    commands: Collection<string, any>
     buttons: Collection<string, Button>
     modals: Collection<string, Modal>
 
@@ -35,14 +36,14 @@ export default class Bot extends Client {
         this.events.set(event.name, event)
     }
 
-    registerCommand(command: any) {
+    registerCommand(command: Command) {
         this.commands.set(command.name, command)
     }
 
     up() {
         require('~/handlers/ComponentHandler')(this)
-        // LOAD COMMANDS
-        // LOAD EVENTS
+        require('~/handlers/CommandHandler')(this)
+        require('~/handlers/EventHandler')(this)
 
         this.login(TOKEN)
             .then(_ => {
