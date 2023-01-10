@@ -1,5 +1,6 @@
-import {ButtonBuilder, ButtonStyle} from "discord.js";
+import {ButtonBuilder, ButtonStyle, ModalBuilder} from "discord.js";
 
+// * COMPONENTS * \\
 export class Component {
     id: string
     callback: Function
@@ -10,12 +11,20 @@ export class Component {
     }
 }
 
+// MODALS \\
 export class Modal extends Component {
     constructor(id: string, callback: Function) {
         super(id, callback);
     }
+
+    build(): ModalBuilder {
+        const modal: ModalBuilder = new ModalBuilder()
+
+        return modal
+    }
 }
 
+// BUTTONS \\
 export class ButtonOptions {
     label: string
     icon: string | undefined
@@ -29,7 +38,6 @@ export class ButtonOptions {
         this.disabled = disabled || false
     }
 }
-
 export class Button extends Component {
     options: ButtonOptions
     constructor(id: string, callback: Function, options: ButtonOptions) {
