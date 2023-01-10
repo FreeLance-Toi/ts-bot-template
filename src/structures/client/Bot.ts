@@ -1,10 +1,13 @@
-import {Client, Collection, ColorResolvable} from 'discord.js'
-const { token } = process.env
+import { Client, Collection, ColorResolvable } from 'discord.js'
+import {Button, Component, Modal} from '~/structures/modules/Component'
+const { TOKEN } = process.env
 
 export default class Bot extends Client {
     color: ColorResolvable
     events: Collection<string, any>
     commands: Collection<string, any>
+    buttons: Collection<string, Button>
+    modals: Collection<string, Modal>
 
     constructor(color?: ColorResolvable) {
         super({ intents: 32767})
@@ -12,14 +15,35 @@ export default class Bot extends Client {
         this.color = color || '#000000'
         this.events = new Collection()
         this.commands = new Collection()
+        this.buttons = new Collection()
+        this.modals = new Collection()
+    }
+
+    registerComponent(component: Component): string {
+        if (component instanceof Button) {
+            this.buttons.set(component.id, component)
+            return "Button"
+        } else if (component instanceof Modal) {
+            this.modals.set(component.id, component)
+            return "Modal"
+        }
+        return "-"
+    }
+
+    registerEvent(event: any) {
+        this.events.set(event.name, event)
+    }
+
+    registerCommand(command: any) {
+        this.commands.set(command.name, command)
     }
 
     up() {
-        // LOAD COMPONENTS
+        require('~/handlers/ComponentHandler')(this)
         // LOAD COMMANDS
         // LOAD EVENTS
 
-        this.login(token)
+        this.login(TOKEN)
             .then(_ => {
                 console.log(`Logged in!`)
             })
