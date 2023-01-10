@@ -3,7 +3,7 @@ import Bot from "~/structures/client/Bot";
 
 const Ascii = require('ascii-table')
 
-module.exports = function handle(bot: Bot) {
+module.exports = (bot: Bot) => {
     const components: string[] = require('./FileHandler')('./src/components/', true)
     const table = new Ascii('Components')
 
@@ -13,10 +13,13 @@ module.exports = function handle(bot: Bot) {
 
             const type: string = bot.registerComponent(component)
 
-            if (!component.id) return table.addRow('', type, '🔸 FAILED', `Missing component's ID.`)
-            table.addRow(component.id, type, '🔹 SUCCESS')
+            if (!component.id) return table.addRow('?', type, '🔸 ÉCHOUÉ', `ID du composant manquant.`)
+            table.addRow(component.id, type, '🔹 SUCCÈS')
         })
 
-        console.log(table.toString())
+        return console.log(table.toString())
     }
+
+    table.addRow('Aucune donnée')
+    console.log(table.toString())
 }
